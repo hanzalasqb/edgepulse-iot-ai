@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+  --color-ink-950: #05080f;
+  --color-ink-900: #0a0f1c;
+  --color-ink-800: #111827;
+  --color-ink-700: #1b2436;
+  --color-brand-300: #67e8f9;
+  --color-brand-400: #22d3ee;
+  --color-brand-500: #06b6d4;
+}
+
+html, body, #root { height: 100%; }
+body { @apply bg-ink-950 text-slate-200 antialiased; }
+::selection { @apply bg-brand-500/30; }
+* { scrollbar-width: thin; scrollbar-color: #1f2a40 transparent; }
+
+@utility card { @apply rounded-2xl border border-white/[0.06] bg-ink-900/80 shadow-xl shadow-black/20; }
+@utility btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50; }
+@utility btn-primary { @apply btn bg-brand-500 text-ink-950 hover:bg-brand-400; }
+@utility btn-ghost { @apply btn border border-white/10 text-slate-300 hover:bg-white/5; }
+@utility input { @apply w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-brand-500/60 focus:ring-2 focus:ring-brand-500/20; }
+@utility chip { @apply inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium; }
+
+.prose-chat { @apply text-[14.5px] leading-relaxed text-slate-200; }
+.prose-chat h1, .prose-chat h2, .prose-chat h3 { @apply mt-4 mb-2 font-semibold text-white; }
+.prose-chat p { @apply my-2; }
+.prose-chat ul { @apply my-2 list-disc pl-5; }
+.prose-chat ol { @apply my-2 list-decimal pl-5; }
+.prose-chat li { @apply my-0.5; }
+.prose-chat strong { @apply text-white; }
+.prose-chat a { @apply text-brand-300 underline underline-offset-2; }
+.prose-chat code { @apply rounded bg-white/10 px-1.5 py-0.5 font-mono text-[12.5px] text-brand-300; }
+.prose-chat pre { @apply my-3 overflow-x-auto rounded-xl border border-white/10 bg-ink-950 p-4; }
+.prose-chat pre code { @apply bg-transparent p-0 text-slate-200; }
+.prose-chat table { @apply my-3 w-full border-collapse text-sm; }
+.prose-chat th, .prose-chat td { @apply border border-white/10 px-3 py-1.5 text-left; }
+.prose-chat th { @apply bg-white/5 text-white; }

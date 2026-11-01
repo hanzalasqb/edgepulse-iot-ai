@@ -1,0 +1,9 @@
+node_modules/
+dist/
+__pycache__/
+.pytest_cache/
+.venv/
+*.db
+.env
+firmware/include/secrets.h
+.pio/

@@ -1,0 +1,48 @@
+services:
+  mqtt:
+    image: eclipse-mosquitto:2
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    ports:
+      - "1883:1883"
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: edgepulse
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-edgepulse-local}
+      POSTGRES_DB: edgepulse
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U edgepulse"]
+      interval: 5s
+      retries: 10
+  backend:
+    build: ./backend
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://edgepulse:${POSTGRES_PASSWORD:-edgepulse-local}@db:5432/edgepulse
+      MQTT_HOST: mqtt
+      SEED_DEMO_DEVICES: "true"
+      DEMO_DEVICE_KEY: ${DEMO_DEVICE_KEY:-demo-device-key}
+    depends_on:
+      db:
+        condition: service_healthy
+      mqtt:
+        condition: service_started
+    ports:
+      - "8000:8000"
+  simulator:
+    build: ./simulator
+    command: ["--url", "http://backend:8000", "--mqtt", "mqtt", "--key", "${DEMO_DEVICE_KEY:-demo-device-key}", "--backfill", "30"]
+    depends_on: [backend]
+    restart: on-failure
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    depends_on: [backend]
+    ports:
+      - "3000:80"
+volumes:
+  pgdata:
